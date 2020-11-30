@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>登陆页面</title>
+	</head>
+	<body>
+		账号:<input type="text" name="username"/>
+		密码:<input type="password" name="password"/>
+		<button onclick="login()">登陆</button>
+		<script type="text/javascript">
+			function login(){
+				var username = document.getElementsByTagName("input")[0].value;
+				var password = document.getElementsByTagName("input")[1].value;
+				var xmlhttp;
+				var obj = {};
+				if (window.XMLHttpRequest){//  IE7+, Firefox, Chrome, Opera, Safari 浏览器执行代码
+				    xmlhttp=new XMLHttpRequest();
+				}else{// IE6, IE5 浏览器执行代码
+				    xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+				}
+				xmlhttp.open("post","php/controller/UserController.php");//async：true（异步）或 false（同步）
+				xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+				xmlhttp.send("username="+username+"&password="+password);
+				xmlhttp.onreadystatechange=function(){//请求成功后，后台回传成功方法
+			    	if (xmlhttp.readyState==4 && xmlhttp.status==200){
+			    		var result = xmlhttp.responseText;//接收后台传来json数据
+			    		obj = JSON.parse(result);//将json格式转换为对象
+			    		if(obj.flag == true){
+			    			location.href = "index.php";
+			    		}else{
+			    			alert("用户名或密码输入有误");
+			    		}
+			    	}
+				}
+			}
+		</script>
+	</body>
+</html>
